@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Your Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#14213d; --violet:#5b3df5; --violet-dark:#4326d4; --sun:#ffc93c;
+  --mint:#2ec4a6; --canvas:#f4f3fb; --card:#ffffff; --line:#dcdaf0; --muted:#5c6482;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:"DM Sans",system-ui,sans-serif;background:var(--canvas);color:var(--ink);line-height:1.5}
+h1,h2,.display{font-family:"Bricolage Grotesque","DM Sans",sans-serif}
+
+.page{display:grid;grid-template-columns:minmax(300px,380px) 1fr;gap:40px;max-width:1100px;margin:0 auto;padding:40px 24px 60px}
+
+/* Left: live profile card */
+.side{position:sticky;top:24px;align-self:start}
+.side h1{font-size:40px;line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.side .lead{color:var(--muted);margin:0 0 26px;max-width:34ch}
+.passport{background:var(--ink);color:#fff;border-radius:22px;padding:24px;position:relative;overflow:hidden}
+.passport::after{content:"";position:absolute;right:-40px;top:-40px;width:140px;height:140px;border-radius:50%;background:var(--violet);opacity:.55}
+.passport>*{position:relative;z-index:1}
+.avatar{width:56px;height:56px;border-radius:16px;background:var(--sun);color:var(--ink);display:grid;place-items:center;font:800 26px "Bricolage Grotesque",sans-serif;margin-bottom:14px}
+.p-name{font:800 24px "Bricolage Grotesque",sans-serif;margin:0;min-height:30px;word-break:break-word}
+.p-meta{margin:2px 0 18px;color:#c9cdf0;font-size:14px;min-height:21px}
+.p-group{margin-bottom:14px}
+.p-group span{display:block;font-size:13px;color:#aab0dd;margin-bottom:6px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;min-height:28px}
+.tags i{font-style:normal;font-size:13px;font-weight:500;padding:4px 11px;border-radius:99px;background:rgba(255,255,255,.14)}
+.tags i.empty{background:none;padding-left:0;color:#8890c4}
+.meter{margin-top:20px}
+.meter-row{display:flex;justify-content:space-between;font-size:13px;color:#c9cdf0;margin-bottom:6px}
+.bar{height:8px;border-radius:99px;background:rgba(255,255,255,.18);overflow:hidden}
+.bar b{display:block;height:100%;width:0;background:var(--mint);border-radius:99px;transition:width .35s ease}
+
+/* Right: form */
+.card{background:var(--card);border-radius:22px;padding:34px;border:1px solid var(--line)}
+.section{padding-bottom:28px;margin-bottom:28px;border-bottom:1px solid var(--line)}
+.section:last-of-type{border-bottom:0;margin-bottom:8px;padding-bottom:0}
+.section h2{font-size:21px;margin:0 0 4px;font-weight:600}
+.hint{margin:0 0 16px;color:var(--muted);font-size:14px}
+label.field{display:block;font-weight:700;font-size:14px;margin-bottom:6px}
+input[type=text],select,textarea{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;font:inherit;font-size:16px;color:var(--ink);background:#fff;margin-bottom:16px;transition:border-color .15s,box-shadow .15s}
+textarea{min-height:96px;resize:vertical}
+input[type=text]:focus,select:focus,textarea:focus{outline:none;border-color:var(--violet);box-shadow:0 0 0 4px rgba(91,61,245,.15)}
+input::placeholder,textarea::placeholder{color:#9aa0bd}
+
+/* Chip choices */
+.options{display:flex;flex-wrap:wrap;gap:10px}
+.chip{position:relative;cursor:pointer}
+.chip input{position:absolute;opacity:0;inset:0;width:100%;height:100%;cursor:pointer;margin:0}
+.chip span{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:99px;border:1.5px solid var(--line);font-weight:500;background:#fff;transition:background .15s,border-color .15s,color .15s}
+.chip span::before{content:"";width:16px;height:16px;border-radius:50%;border:1.5px solid #b5b9d6;transition:all .15s}
+.chip:hover span{border-color:var(--violet)}
+.chip input:checked+span{background:var(--violet);border-color:var(--violet);color:#fff}
+.chip input:checked+span::before{background:var(--sun) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='%2314213d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;border-color:var(--sun)}
+.chip input:focus-visible+span{outline:3px solid var(--sun);outline-offset:2px}
+
+.submit-button{width:100%;margin-top:10px;padding:17px;background:var(--violet);color:#fff;border:0;border-radius:14px;font:700 17px "DM Sans",sans-serif;cursor:pointer;transition:background .15s,transform .1s}
+.submit-button:hover{background:var(--violet-dark)}
+.submit-button:active{transform:scale(.99)}
+.submit-button:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+.fineprint{text-align:center;color:var(--muted);font-size:13px;margin:12px 0 0}
+
+@media (max-width:860px){
+  .page{grid-template-columns:1fr;gap:24px;padding:24px 16px 48px}
+  .side{position:static}
+  .side h1{font-size:32px}
+  .card{padding:22px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <aside class="side">
+    <h1>Build your learning profile</h1>
+    <p class="lead">Tell us what you like and where you want to go. We'll suggest skills to learn and a roadmap to follow.</p>
+
+    <div class="passport" aria-live="polite">
+      <div class="avatar" id="avatar">?</div>
+      <p class="p-name" id="pName">Your name</p>
+      <p class="p-meta" id="pMeta">Class not selected</p>
+      <div class="p-group"><span>Subjects</span><div class="tags" id="pSubjects"></div></div>
+      <div class="p-group"><span>Interests</span><div class="tags" id="pInterests"></div></div>
+      <div class="p-group"><span>Career goal</span><div class="tags" id="pCareer"></div></div>
+      <div class="meter">
+        <div class="meter-row"><span>Profile complete</span><span id="pct">0%</span></div>
+        <div class="bar"><b id="fill"></b></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="card">
+    <form method="POST" action="/profile" id="profileForm">
+
+      <div class="section">
+        <h2>About you</h2>
+        <p class="hint">Just the basics.</p>
+        <label class="field" for="name">Your name</label>
+        <input type="text" id="name" name="name" placeholder="Enter your name" autocomplete="given-name" required>
+
+        <label class="field" for="class">Your class</label>
+        <select id="class" name="class" required>
+          <option value="">Select your class</option>
+          <option value="8">Class 8</option>
+          <option value="9">Class 9</option>
+          <option value="10">Class 10</option>
+          <option value="11">Class 11</option>
+          <option value="12">Class 12</option>
+        </select>
+      </div>
+
+      <div class="section">
+        <h2>Subjects you like</h2>
+        <p class="hint">Pick as many as you want.</p>
+        <div class="options" data-group="subjects">
+          <label class="chip"><input type="checkbox" name="subjects" value="maths"><span>Mathematics</span></label>
+          <label class="chip"><input type="checkbox" name="subjects" value="science"><span>Science</span></label>
+          <label class="chip"><input type="checkbox" name="subjects" value="computer"><span>Computer</span></label>
+          <label class="chip"><input type="checkbox" name="subjects" value="english"><span>English</span></label>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Your interests</h2>
+        <p class="hint">What do you like exploring, even outside school?</p>
+        <div class="options" data-group="interests">
+          <label class="chip"><input type="checkbox" name="interests" value="technology"><span>Technology</span></label>
+          <label class="chip"><input type="checkbox" name="interests" value="science"><span>Science</span></label>
+          <label class="chip"><input type="checkbox" name="interests" value="design"><span>Design</span></label>
+          <label class="chip"><input type="checkbox" name="interests" value="business"><span>Business</span></label>
+          <label class="chip"><input type="checkbox" name="interests" value="creativity"><span>Creativity</span></label>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Skills and hobbies</h2>
+        <p class="hint">Big or small, it all helps us suggest the right next step.</p>
+        <label class="field" for="skills">Skills you already have</label>
+        <textarea id="skills" name="skills" placeholder="Example: Python, drawing, communication, video editing..."></textarea>
+
+        <label class="field" for="hobbies">What you enjoy doing</label>
+        <textarea id="hobbies" name="hobbies" placeholder="Example: Gaming, cricket, drawing, reading..."></textarea>
+      </div>
+
+      <div class="section">
+        <h2>Career field</h2>
+        <p class="hint">Not sure? Choose the closest one. You can change it later.</p>
+        <label class="field" for="career">Preferred career field</label>
+        <select id="career" name="career" required>
+          <option value="">Select a career field</option>
+          <option value="technology">Technology</option>
+          <option value="engineering">Engineering</option>
+          <option value="science">Science</option>
+          <option value="business">Business</option>
+          <option value="design">Design</option>
+          <option value="healthcare">Healthcare</option>
+          <option value="cybersecurity">Cybersecurity</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <button type="submit" class="submit-button">Get my skill recommendations</button>
+      <p class="fineprint">You'll see your suggested skills on the next page.</p>
+    </form>
+  </main>
+
+</div>
+
+<script>
+(function(){
+  var $ = function(id){return document.getElementById(id)};
+  var form = $('profileForm');
+
+  function label(el){return el.options ? el.options[el.selectedIndex].text : el.value}
+
+  function tags(box, items, emptyText){
+    box.innerHTML = '';
+    if(!items.length){
+      var e = document.createElement('i'); e.className = 'empty'; e.textContent = emptyText; box.appendChild(e); return;
+    }
+    items.forEach(function(t){
+      var i = document.createElement('i'); i.textContent = t; box.appendChild(i);
+    });
+  }
+
+  function checked(group){
+    return Array.prototype.map.call(
+      form.querySelectorAll('[data-group="'+group+'"] input:checked'),
+      function(c){return c.parentNode.querySelector('span').textContent}
+    );
+  }
+
+  function update(){
+    var name = $('name').value.trim();
+    $('pName').textContent = name || 'Your name';
+    $('avatar').textContent = name ? name.charAt(0).toUpperCase() : '?';
+    $('pMeta').textContent = $('class').value ? label($('class')) : 'Class not selected';
+
+    var subjects = checked('subjects'), interests = checked('interests');
+    tags($('pSubjects'), subjects, 'None picked yet');
+    tags($('pInterests'), interests, 'None picked yet');
+    tags($('pCareer'), $('career').value ? [label($('career'))] : [], 'Not chosen yet');
+
+    var done = 0;
+    if(name) done++;
+    if($('class').value) done++;
+    if(subjects.length) done++;
+    if(interests.length) done++;
+    if($('skills').value.trim()) done++;
+    if($('hobbies').value.trim()) done++;
+    if($('career').value) done++;
+    var pct = Math.round(done / 7 * 100);
+    $('pct').textContent = pct + '%';
+    $('fill').style.width = pct + '%';
+  }
+
+  form.addEventListener('input', update);
+  form.addEventListener('change', update);
+  update();
+})();
+</script>
+</body>
+</html>

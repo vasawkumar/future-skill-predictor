@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Future Skill Predictor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#14213d; --violet:#5b3df5; --violet-dark:#4326d4; --sun:#ffc93c;
+  --mint:#2ec4a6; --canvas:#f4f3fb; --line:#dcdaf0; --muted:#5c6482;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"DM Sans",system-ui,sans-serif;background:var(--canvas);color:var(--ink);line-height:1.5}
+h1,h2,h3,.display{font-family:"Bricolage Grotesque","DM Sans",sans-serif}
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+
+/* Nav */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
+.brand{font:800 20px "Bricolage Grotesque",sans-serif;display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none}
+.brand i{width:30px;height:30px;border-radius:9px;background:var(--violet);display:grid;place-items:center;font-style:normal;font-size:16px}
+.nav a.small{font-weight:700;font-size:15px;color:var(--violet);text-decoration:none}
+.nav a.small:hover{text-decoration:underline}
+
+/* Hero */
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;padding:48px 0 72px}
+h1{font-size:62px;line-height:1;margin:0 0 20px;font-weight:800;letter-spacing:-.03em}
+.subtitle{font-size:20px;color:var(--muted);max-width:30em;margin:0 0 30px}
+.button{display:inline-block;padding:16px 30px;background:var(--violet);color:#fff;text-decoration:none;border-radius:14px;font-size:18px;font-weight:700;transition:background .15s,transform .1s}
+.button:hover{background:var(--violet-dark)}
+.button:active{transform:scale(.98)}
+.button:focus-visible,.nav a:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+.takes{margin:14px 0 0;font-size:14px;color:var(--muted)}
+
+/* Roadmap preview */
+.roadmap{background:var(--ink);color:#fff;border-radius:26px;padding:28px 28px 30px;position:relative;overflow:hidden}
+.roadmap::after{content:"";position:absolute;right:-60px;top:-60px;width:190px;height:190px;border-radius:50%;background:var(--violet);opacity:.5}
+.roadmap>*{position:relative;z-index:1}
+.r-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:22px}
+.r-head b{font:800 19px "Bricolage Grotesque",sans-serif}
+.r-head span{font-size:13px;color:#aab0dd}
+.path{list-style:none;margin:0;padding:0;position:relative}
+.path::before{content:"";position:absolute;left:15px;top:14px;bottom:14px;width:2px;background:rgba(255,255,255,.2)}
+.path li{display:flex;gap:16px;align-items:flex-start;padding:10px 0;position:relative}
+.dot{flex:none;width:32px;height:32px;border-radius:50%;background:#2b3858;border:2px solid rgba(255,255,255,.25);display:grid;place-items:center;font-size:14px;animation:light .5s ease forwards;animation-delay:calc(var(--i) * .55s + .3s)}
+.path li strong{display:block;font-size:16px}
+.path li small{color:#aab0dd;font-size:13px}
+.path li:last-child .dot{font-size:16px}
+@keyframes light{to{background:var(--sun);border-color:var(--sun);color:var(--ink)}}
+.path li:last-child .dot{animation-name:lightmint}
+@keyframes lightmint{to{background:var(--mint);border-color:var(--mint);color:var(--ink)}}
+.r-foot{margin:18px 0 0;font-size:13px;color:#8890c4}
+
+/* Steps */
+.steps-section{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.steps-section .wrap{padding-top:64px;padding-bottom:72px}
+.steps-section h2{font-size:36px;margin:0 0 36px;font-weight:800;letter-spacing:-.02em;max-width:16em}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1.5px solid var(--line);border-radius:22px;overflow:hidden}
+.step{padding:30px 28px 34px}
+.step+.step{border-left:1.5px solid var(--line)}
+.step .n{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font:800 18px "Bricolage Grotesque",sans-serif;margin-bottom:18px}
+.step:nth-child(1) .n{background:var(--violet);color:#fff}
+.step:nth-child(2) .n{background:var(--sun);color:var(--ink)}
+.step:nth-child(3) .n{background:var(--mint);color:var(--ink)}
+.step h3{font-size:22px;margin:0 0 8px;font-weight:600}
+.step p{margin:0;color:var(--muted)}
+
+/* Closing */
+.closing{text-align:center;padding:72px 0 80px}
+.closing h2{font-size:38px;margin:0 0 22px;font-weight:800;letter-spacing:-.02em}
+footer{text-align:center;color:var(--muted);font-size:13px;padding-bottom:32px}
+
+@media (max-width:860px){
+  .hero{grid-template-columns:1fr;gap:36px;padding:24px 0 52px}
+  h1{font-size:44px}
+  .subtitle{font-size:18px}
+  .steps{grid-template-columns:1fr}
+  .step+.step{border-left:0;border-top:1.5px solid var(--line)}
+  .steps-section h2,.closing h2{font-size:30px}
+}
+@media (prefers-reduced-motion:reduce){
+  .dot{animation:none;background:var(--sun);border-color:var(--sun);color:var(--ink)}
+  .path li:last-child .dot{background:var(--mint);border-color:var(--mint)}
+  *{transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav class="nav">
+    <a class="brand" href="/"><i aria-hidden="true">🚀</i>Future Skill Predictor</a>
+    <a class="small" href="/profile">Create profile</a>
+  </nav>
+
+  <header class="hero">
+    <div>
+      <h1>Find the skills your future needs</h1>
+      <p class="subtitle">Tell us your subjects, interests and goals. Get skills that fit you and a roadmap for what to learn next.</p>
+      <a href="/profile" class="button">Start your journey →</a>
+      <p class="takes">Takes about two minutes. No sign-up needed.</p>
+    </div>
+
+    <div class="roadmap" aria-label="Example learning roadmap">
+      <div class="r-head"><b>Your roadmap</b><span>Example</span></div>
+      <ol class="path">
+        <li style="--i:0"><span class="dot" aria-hidden="true">✓</span><div><strong>Where you are today</strong><small>Class 10 · Maths, Computer</small></div></li>
+        <li style="--i:1"><span class="dot" aria-hidden="true">✓</span><div><strong>Learn Python basics</strong><small>Write small programs and games</small></div></li>
+        <li style="--i:2"><span class="dot" aria-hidden="true">✓</span><div><strong>Work with data</strong><small>Charts, spreadsheets, simple analysis</small></div></li>
+        <li style="--i:3"><span class="dot" aria-hidden="true">★</span><div><strong>Your goal: Technology</strong><small>Build a project you can show</small></div></li>
+      </ol>
+      <p class="r-foot">Yours will be based on your own answers.</p>
+    </div>
+  </header>
+</div>
+
+<section class="steps-section">
+  <div class="wrap">
+    <h2>From your interests to a plan, in three steps</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="n">1</div>
+        <h3>Build your profile</h3>
+        <p>Share your class, favourite subjects, hobbies and the career field you're curious about.</p>
+      </div>
+      <div class="step">
+        <div class="n">2</div>
+        <h3>Get skill recommendations</h3>
+        <p>See skills that match your interests and career field, so you know what's worth learning.</p>
+      </div>
+      <div class="step">
+        <div class="n">3</div>
+        <h3>Follow your roadmap</h3>
+        <p>Get clear, step-by-step guidance on what to learn and practise, built around your own goals.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <section class="closing">
+    <h2>Ready to see what's next for you?</h2>
+    <a href="/profile" class="button">Create my profile →</a>
+  </section>
+  <footer>Future Skill Predictor</footer>
+</div>
+
+</body>
+</html>
